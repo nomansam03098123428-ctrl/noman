@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <script>
+      (function() {
+        // Prevent unhandled exception if an external or extension script attempts to reassign read-only fetch
+        window.addEventListener('error', function(event) {
+          if (event && event.message && event.message.includes('fetch')) {
+            event.preventDefault();
+            if (typeof event.stopImmediatePropagation === 'function') {
+              event.stopImmediatePropagation();
+            }
+            return true;
+          }
+        }, true);
+
+        // Patch Window.prototype, window, and globalThis so window.fetch = ... never throws
+        try {
+          var activeFetch = window.fetch;
+
+          // 1. Patch Window.prototype
+          if (typeof Window !== 'undefined' && Window.prototype) {
+            try {
+              Object.defineProperty(Window.prototype, 'fetch', {
+                get: function() { return activeFetch; },
+                set: function(v) { activeFetch = v; },
+                configurable: true,
+                enumerable: true
+              });
+            } catch (_) {}
+          }
+
+          // 2. Patch window instance
+          try {
+            Object.defineProperty(window, 'fetch', {
+              get: function() { return activeFetch; },
+              set: function(v) { activeFetch = v; },
+              configurable: true,
+              enumerable: true
+            });
+          } catch (_) {}
+
+          // 3. Patch globalThis
+          if (typeof globalThis !== 'undefined' && globalThis !== window) {
+            try {
+              Object.defineProperty(globalThis, 'fetch', {
+                get: function() { return activeFetch; },
+                set: function(v) { activeFetch = v; },
+                configurable: true,
+                enumerable: true
+              });
+            } catch (_) {}
+          }
+        } catch (_) {}
+      })();
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Voiceover to Stock Video Creator</title>
+    <meta name="description" content="Transform uploaded voiceover audio into synced stock video scenes with exact timing, intelligent visual matching, smooth transitions, and FFmpeg video rendering." />
+    <meta property="og:title" content="Voiceover to Stock Video Creator" />
+    <meta property="og:description" content="Transform uploaded voiceover audio into synced stock video scenes with exact timing, intelligent visual matching, smooth transitions, and FFmpeg video rendering." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

@@ -1,0 +1,6 @@
+{
+  "name": "Voiceover to Stock Video Creator",
+  "description": "Transform uploaded voiceover audio into synced stock video scenes with exact timing, intelligent visual matching, smooth transitions, and FFmpeg video rendering.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
